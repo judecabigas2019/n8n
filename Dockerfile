@@ -1,23 +1,22 @@
-# Start from Node (we'll build n8n from source)
 FROM node:18
 
-# Set working directory
 WORKDIR /usr/src/app
 
-# Copy project files
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy relevant files
 COPY . .
 
-# Install core dependencies
-RUN npm install
+# Install dependencies with pnpm
+RUN pnpm install
 
-# Install the custom Discord Trigger node
-RUN npm install @binodev/n8n-nodes-discord-trigger
+# Add Discord Trigger node
+RUN pnpm add @binodev/n8n-nodes-discord-trigger
 
-# Build n8n (TypeScript)
-RUN npm run build
+# Build n8n
+RUN pnpm run build
 
-# Expose default n8n port
 EXPOSE 5678
 
-# Start n8n
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "start"]
